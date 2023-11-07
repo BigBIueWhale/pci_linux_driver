@@ -1,5 +1,3 @@
-// https://chat.openai.com/share/34a846b1-a504-4cf0-9b57-352958a02fc2
-
 #include <linux/module.h>
 #include <linux/kernel.h>
 #include <linux/pci.h>
@@ -67,17 +65,18 @@ static int pcie_probe(struct pci_dev *pdev, const struct pci_device_id *ent) {
         return -ENOMEM;
     }
 
+    // Print the physical address of the DMA transfer
+    printk(KERN_INFO "DMA handle (physical address) is %pad\n", &info->dma_handle);
+
     // Set up the DMA here with the handle.
     // info->dma_handle is what we need to write
     // to the DMA register that Daniel's FPGA expects.
-    // THAT IS THE PHYSICAL ADDRESS!!!!!!!!!!!!!!!!!!!!!!!!!!!11
-    // For example, you might write the DMA address to a device register
-    // This is highly device-dependent and requires datasheet consultation
-    
-    printk(KERN_INFO "PCIe device initialized\n");
+    // THAT IS THE PHYSICAL ADDRESS!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
     // Save our info structure to the device's driver_data
     pci_set_drvdata(pdev, info);
+
+    printk(KERN_INFO "PCIe device initialized\n");
 
     return 0;
 }
@@ -119,12 +118,14 @@ static struct pci_driver pcie_driver = {
 
 // Initialize the PCIe driver
 static int __init pcie_init(void) {
+    printk(KERN_INFO "PCIe driver loaded\n");  // Print a message when the driver is loaded
     return pci_register_driver(&pcie_driver);
 }
 
 // Exit the PCIe driver
 static void __exit pcie_exit(void) {
     pci_unregister_driver(&pcie_driver);
+    printk(KERN_INFO "PCIe driver unloaded\n");  // Print a message when the driver is unloaded
 }
 
 module_init(pcie_init);

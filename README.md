@@ -17,7 +17,6 @@ Here is a brief overview of the project files:
 - `load_module.sh`: A script to insert the kernel module into the running kernel.
 - `unload_module.sh`: A script to remove the kernel module from the running kernel.
 - `view_kernel_log.sh`: A script to view the kernel log messages related to the module.
-- `print_all_files.sh`: A script to print out the contents of all the project files.
 
 ## Installation
 

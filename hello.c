@@ -3,9 +3,15 @@
 #include <linux/pci.h>
 #include <linux/init.h>
 #include <linux/interrupt.h>
+#include <linux/io.h>
 
-#define MY_VENDOR_ID 0x1234 // Replace with your vendor ID
-#define MY_DEVICE_ID 0x5678 // Replace with your device ID
+// These are the real values:
+#define MY_VENDOR_ID 0x1363 // Replace with your vendor ID
+#define MY_DEVICE_ID 0x7 // Replace with your device ID
+
+// These are the fake values:
+//#define MY_VENDOR_ID 0x8086
+//#define MY_DEVICE_ID 0x2a10
 
 // This structure holds information about the PCIe device
 struct pcie_dev_info {
@@ -53,7 +59,6 @@ static int pcie_probe(struct pci_dev *pdev, const struct pci_device_id *ent) {
         kfree(info);
         return -EIO;
     }
-
     // Allocate a DMA buffer
     info->dma_buffer = dma_alloc_coherent(&pdev->dev, PAGE_SIZE, &info->dma_handle, GFP_KERNEL);
     if (!info->dma_buffer) {
@@ -72,6 +77,26 @@ static int pcie_probe(struct pci_dev *pdev, const struct pci_device_id *ent) {
     // info->dma_handle is what we need to write
     // to the DMA register that Daniel's FPGA expects.
     // THAT IS THE PHYSICAL ADDRESS!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
+    // The offset from the beginning of the BAR0
+    #define WRITE_OFFSET 0x1000
+    // The value to write
+    //#define WRITE_VALUE 0x11111111 // For turn on
+    #define WRITE_VALUE 0x0 // For turn off
+
+    // After successful DMA buffer allocation, write to the device registers
+    // of Daniel's FPGA, at BAR0
+    // (Consider doing this in another function if it's not part of the initial setup.)
+
+    // Check if the mapped BAR0 range is sufficient
+    if (pci_resource_len(pdev, bar) < (WRITE_OFFSET + sizeof(u32))) {
+        printk(KERN_ERR "BAR0 range too small\n");
+        // Clean up as before
+    } else {
+        // Perform the write operation
+        iowrite32(WRITE_VALUE, info->bar0 + WRITE_OFFSET);
+        printk(KERN_INFO "Wrote 0x%x to BAR0 + 0x%x\n", WRITE_VALUE, WRITE_OFFSET);
+    }
 
     // Save our info structure to the device's driver_data
     pci_set_drvdata(pdev, info);

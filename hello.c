@@ -67,7 +67,10 @@ static int pcie_probe(struct pci_dev *pdev, const struct pci_device_id *ent) {
         return -ENOMEM;
     }
 
-    // Set up the DMA here with the handle
+    // Set up the DMA here with the handle.
+    // info->dma_handle is what we need to write
+    // to the DMA register that Daniel's FPGA expects.
+    // THAT IS THE PHYSICAL ADDRESS!!!!!!!!!!!!!!!!!!!!!!!!!!!11
     // For example, you might write the DMA address to a device register
     // This is highly device-dependent and requires datasheet consultation
     

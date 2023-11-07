@@ -1,1 +1,0 @@
-savedcmd_/home/user/Desktop/test/hello.ko := ld -r -m elf_x86_64 -z noexecstack --build-id=sha1  -T scripts/module.lds -o /home/user/Desktop/test/hello.ko /home/user/Desktop/test/hello.o /home/user/Desktop/test/hello.mod.o;  make -f ./arch/x86/Makefile.postlink /home/user/Desktop/test/hello.ko

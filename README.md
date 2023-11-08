@@ -4,7 +4,7 @@ This repository contains a Linux kernel module for PCIe devices that demonstrate
 
 ## Requirements
 
-This driver has been tested and is confirmed to run on Ubuntu 22.04 64-bit.
+This driver has been tested and is confirmed to run on Lubuntu 18 32-bit.
 
 ## Structure
 

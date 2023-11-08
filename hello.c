@@ -9,6 +9,8 @@
 #define MY_VENDOR_ID 0x1363 // Replace with your vendor ID
 #define MY_DEVICE_ID 0x7 // Replace with your device ID
 
+#define DMA_BUFFER_SIZE (4 * 1024 * 1024)
+
 // These are the fake values:
 //#define MY_VENDOR_ID 0x8086
 //#define MY_DEVICE_ID 0x2a10
@@ -60,7 +62,7 @@ static int pcie_probe(struct pci_dev *pdev, const struct pci_device_id *ent) {
         return -EIO;
     }
     // Allocate a DMA buffer
-    info->dma_buffer = dma_alloc_coherent(&pdev->dev, PAGE_SIZE, &info->dma_handle, GFP_KERNEL);
+    info->dma_buffer = dma_alloc_coherent(&pdev->dev, DMA_BUFFER_SIZE, &info->dma_handle, GFP_KERNEL);
     if (!info->dma_buffer) {
         printk(KERN_ERR "Failed to allocate DMA buffer\n");
         pci_iounmap(pdev, info->bar0);
@@ -111,7 +113,7 @@ static void pcie_remove(struct pci_dev *pdev) {
     struct pcie_dev_info *info = pci_get_drvdata(pdev);
 
     // Clean up our DMA buffer
-    dma_free_coherent(&pdev->dev, PAGE_SIZE, info->dma_buffer, info->dma_handle);
+    dma_free_coherent(&pdev->dev, DMA_BUFFER_SIZE, info->dma_buffer, info->dma_handle);
 
     // Release the I/O memory
     pci_iounmap(pdev, info->bar0);

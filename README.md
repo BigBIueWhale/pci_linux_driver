@@ -81,16 +81,6 @@ Replace `MY_VENDOR_ID` and `MY_DEVICE_ID` in `hello.c` with your specific PCIe d
 - **print_all_files.sh**: Displays the content of all the project files for quick inspection.
 - **view_kernel_log.sh**: Displays the last few kernel log entries, which is useful for debugging.
 
-## Contribution
-
-Contributions to this project are welcome. To contribute:
-
-1. Fork it (https://github.com/yourname/yourproject/fork)
-2. Create your feature branch (`git checkout -b feature/fooBar`)
-3. Commit your changes (`git commit -am 'Add some fooBar'`)
-4. Push to the branch (`git push origin feature/fooBar`)
-5. Create a new Pull Request
-
 ## Author
 
 Ronen Zyroff
